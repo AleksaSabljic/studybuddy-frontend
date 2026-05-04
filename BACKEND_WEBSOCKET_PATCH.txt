@@ -1,0 +1,73 @@
+# =====================================================
+# BACKEND WEBSOCKET PATCH — Run this BEFORE launching Flutter
+# Add this to your existing studybuddy-backend/server.js
+# =====================================================
+
+# Step 1 - install ws package in your backend folder:
+#   npm install ws
+
+# Step 2 - Add this code to server.js AFTER your existing HTTP server setup.
+# Find the line: app.listen(PORT, ...) and REPLACE it with:
+
+/*
+const http = require('http');
+const { WebSocketServer } = require('ws');
+const jwt = require('jsonwebtoken');
+
+// Create HTTP server from Express app
+const server = http.createServer(app);
+
+// ─── WebSocket Chat Server ─────────────────────────────────────────────────
+const wss = new WebSocketServer({ server });
+
+const clients = new Map(); // ws -> { username, userId }
+
+wss.on('connection', (ws, req) => {
+  // Parse token from query string: ws://localhost:3000?token=...
+  const url = new URL(req.url, 'http://localhost');
+  const token = url.searchParams.get('token');
+
+  let user = null;
+  try {
+    user = jwt.verify(token, process.env.JWT_SECRET);
+  } catch {
+    ws.close(1008, 'Invalid token');
+    return;
+  }
+
+  clients.set(ws, { username: user.username, userId: user.id });
+  console.log(`WS: ${user.username} connected`);
+
+  ws.on('message', (data) => {
+    try {
+      const msg = JSON.parse(data.toString());
+      // Broadcast to all connected clients
+      const out = JSON.stringify({
+        type: 'message',
+        text: msg.text,
+        username: user.username,
+        userId: user.id,
+        timestamp: new Date().toISOString(),
+      });
+      wss.clients.forEach((client) => {
+        if (client.readyState === ws.OPEN) {
+          client.send(out);
+        }
+      });
+    } catch (e) {
+      console.error('WS message error:', e);
+    }
+  });
+
+  ws.on('close', () => {
+    clients.delete(ws);
+    console.log(`WS: ${user.username} disconnected`);
+  });
+});
+
+// Start server (HTTP + WS on same port)
+server.listen(PORT, () => {
+  console.log(`Server + WebSocket running on http://localhost:${PORT}`);
+  console.log(`Swagger UI: http://localhost:${PORT}/api-docs`);
+});
+*/

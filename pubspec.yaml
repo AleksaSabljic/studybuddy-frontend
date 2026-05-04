@@ -1,0 +1,71 @@
+name: studybuddy
+description: Study group management app for Mobile and Wireless Technologies course.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+  # HTTP & API
+  http: ^1.2.0
+  dio: ^5.4.0
+
+  # State management
+  provider: ^6.1.2
+
+  # Auth & storage
+  flutter_secure_storage: ^9.0.0
+  shared_preferences: ^2.2.3
+
+  # JWT decoding
+  jwt_decoder: ^2.0.1
+
+  # File picking & camera
+  image_picker: ^1.0.7
+  file_picker: ^6.1.1
+  permission_handler: ^11.3.0
+
+  # WebSocket (chat)
+  web_socket_channel: ^2.4.3
+
+  # Push notifications
+  firebase_core: ^2.27.0
+  firebase_messaging: ^14.7.19
+  flutter_local_notifications: ^16.3.0
+  firebase_analytics: ^10.8.9
+  firebase_crashlytics: ^3.4.18
+
+  # Google Sign In
+  google_sign_in: ^6.2.1
+
+  # Location
+  geolocator: ^11.0.0
+  google_maps_flutter: ^2.6.0
+
+  # Offline / local DB
+  sqflite: ^2.3.2
+  path: ^1.9.0
+
+  # URL launching (file downloads, external links)
+  url_launcher: ^6.2.5
+
+  # UI helpers
+  flutter_svg: ^2.0.10+1
+  cached_network_image: ^3.3.1
+  intl: ^0.19.0
+  shimmer: ^3.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
