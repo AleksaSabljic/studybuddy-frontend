@@ -6,6 +6,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'firebase_options.dart';
 import 'providers/auth_provider.dart';
 import 'providers/chat_provider.dart';
 import 'providers/theme_provider.dart';
@@ -25,7 +26,7 @@ import 'screens/profile/location_screen.dart';
 // Background message handler — must be top-level
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 }
 
 final FlutterLocalNotificationsPlugin localNotifications =
@@ -44,7 +45,7 @@ Future<void> _initLocalNotifications() async {
 }
 
 Future<void> _initFirebase() async {
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Crashlytics
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
