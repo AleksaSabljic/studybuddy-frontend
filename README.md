@@ -23,7 +23,6 @@ Two user roles are supported:
 | Backend GitHub | https://github.com/AleksaSabljic/studybuddy-backend |
 | Frontend GitHub | https://github.com/AleksaSabljic/studybuddy-frontend |
 | API Documentation (Swagger) | http://localhost:3000/api-docs |
-| Figma Prototype | https://www.figma.com/design/du2em5iANF6pbEDInkOThA/ |
 
 ---
 
@@ -35,15 +34,15 @@ Two user roles are supported:
 - Full CRUD for tasks (create, edit, delete, view)
 - Binary file upload and download (camera, gallery, file picker)
 - Real-time group chat via WebSockets with persistent DB-backed history
-- Offline task creation with automatic sync on reconnect (SQLite queue)
+- Unread message badge with accurate count (own messages excluded)
+- Offline task caching via SQLite with fallback on reconnect
 - Dark mode (persisted across sessions)
-- Push notifications via Firebase Cloud Messaging
 - Permission handling (camera, storage, location, notifications)
 
 ### Optional Requirements (PVP)
-- **PVP4** — Google SSO authentication (google_sign_in)
-- **PVP5** — Firebase Analytics + Crashlytics
-- **PVP6** — Real-time GPS study location sharing with group map
+- **PVP1** — Cross-Platform Support: built with Flutter, runs fully on Android and web browsers (Chrome). The complete application was demonstrated and verified running on Chrome, making it accessible on any device with a browser.
+- **PVP5** — Firebase Services: Analytics and Crashlytics fully configured for both Android (`google-services.json`) and web (`firebase_options.dart`). Analytics tracks user interactions. Crashlytics provides automatic crash reporting. Firebase Cloud Messaging handles push notifications in both foreground and background.
+- **PVP6** — Location Based Service: students share their GPS coordinates with the group via the `geolocator` package. `POST /location` saves coordinates to the database. `GET /location/group` returns all active members (updated within last 5 minutes). The group list updates in real time. On Android, Google Maps displays member pins (API key required — see Known Limitations). On web, coordinates are listed in the info card.
 
 ### Screens (9 total)
 1. Splash Screen
@@ -54,7 +53,7 @@ Two user roles are supported:
 6. Create / Edit Task Screen
 7. Group Chat Screen (WebSocket, persistent history)
 8. Location Screen (GPS sharing, group member list)
-9. Profile Screen (dark mode toggle, logout)
+9. Profile Screen (user info, logout)
 
 ---
 
@@ -73,15 +72,14 @@ flutter pub get
 # 2. Run on Chrome (for demonstration)
 flutter run -d chrome
 
-# 3. Run on Android device/emulator
+# 3. Run on Android emulator
 flutter run
 ```
 
-> **Note:** The app connects to `localhost:3000` on web and `10.0.2.2:3000` on Android emulator automatically.
+> **Note:** The app connects to `localhost:3000` on web and `10.0.2.2:3000` on Android emulator automatically. For a physical Android device, update `baseUrl` in `lib/utils/app_config.dart` to your machine's local IP address.
 
-### Optional Setup
-- **Google Maps** — add your API key to `android/app/src/main/AndroidManifest.xml` to enable the map view on Android. Coordinates and group sharing work without a key.
-- **Firebase** — place `google-services.json` in `android/app/` to enable push notifications, Analytics, and Crashlytics. The app runs normally without this file.
+### Known Limitations
+- **Google Maps on web** — the map view is replaced with a placeholder on Chrome (Google Maps requires a native API key). GPS coordinates and group location sharing work correctly on both platforms. To enable the map on Android, add your Google Maps API key to `android/app/src/main/AndroidManifest.xml`.
 
 ---
 
@@ -89,7 +87,8 @@ flutter run
 
 ```
 lib/
-├── main.dart                         # Entry point, routing, theme
+├── main.dart                         # Entry point, routing, theme, Firebase init
+├── firebase_options.dart             # Firebase configuration (web + Android)
 ├── models/                           # Data models (User, Task, File, ChatMessage)
 ├── services/                         # API, file upload, local DB, location
 ├── providers/                        # AuthProvider, ChatProvider, ThemeProvider
